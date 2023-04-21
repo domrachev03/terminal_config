@@ -1,0 +1,45 @@
+# Setting default folder for installations
+export ZSH="$HOME/scripts/.config/zsh"
+export ZSH_CUSTOM="$ZSH/custom"
+export ZSH_CACHE_DIR="$ZSH/cache"
+
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+
+# Setting up p10k theme
+#export ZSH_THEME="powerlevel10k/powerlevel10k"
+source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
+
+# Listing all used plugins
+plugins=(
+        git
+        dnf	
+	zsh-autosuggestions
+	zsh-syntax-highlighting
+)
+source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+HISTFILE=$ZSH/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+
+# -------------------------------------------------------------------------------
+# Setting up ROS
+source /opt/ros/noetic/setup.zsh
+source ~/agile_ws/devel/setup.zsh
+ROBOT_IP=$(ip -f inet addr show wlan0 | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
+
+export ROS_IP=$ROBOT_IP
+export ROS_MASTER_URI=http://$ROBOT_IP:11311
+#sudo slcan_attach -f -s6 -o /dev/ttyACM0
+#sudo slcand -S 115200 ttyACM0 can0
+#sudo ip link set up can0
+
